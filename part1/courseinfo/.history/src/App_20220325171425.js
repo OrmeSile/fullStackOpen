@@ -46,11 +46,11 @@ const App = () => {
       <Header course={course} />
 
       <Content
-        parts={course} 
+        parts={parts} 
       />
 
       <Footer
-        parts={course}
+        parts={parts}
       />
     </div>
   )

@@ -50,7 +50,7 @@ const App = () => {
       />
 
       <Footer
-        parts={course}
+        parts={parts}
       />
     </div>
   )

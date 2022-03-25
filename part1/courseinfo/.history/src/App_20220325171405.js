@@ -1,5 +1,5 @@
 
-const Header = (props) => (<h1>{props.name}</h1>);
+const Header = (props) => (<h1>{props.course}</h1>);
 
 const Part = (props) => {
   return (
@@ -46,11 +46,11 @@ const App = () => {
       <Header course={course} />
 
       <Content
-        parts={course} 
+        parts={parts} 
       />
 
       <Footer
-        parts={course}
+        parts={parts}
       />
     </div>
   )
