@@ -11,9 +11,9 @@ const Part = (props) => {
 const Content = (props) => {
   return (
     <div>
-      { props.parts.map((part) => {
-    return <Part key={part.name} part ={part} />
-  }) }
+      {props.parts.map((part) => {
+        return <Part part ={part} />
+      })}
     </div>
   )
 }
@@ -46,7 +46,7 @@ const App = () => {
       <Header course={course} />
 
       <Content
-        parts={course.parts} 
+        parts={course} 
       />
 
       <Footer

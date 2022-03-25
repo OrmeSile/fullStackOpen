@@ -1,5 +1,5 @@
 
-const Header = (props) => (<h1>{props.course.name}</h1>);
+const Header = (props) => (<h1>{props.name}</h1>);
 
 const Part = (props) => {
   return (
@@ -11,9 +11,9 @@ const Part = (props) => {
 const Content = (props) => {
   return (
     <div>
-      { props.parts.map((part) => {
-    return <Part key={part.name} part ={part} />
-  }) }
+      {() => props.parts.map((part) => {
+        return <Part part ={part} />
+      })}
     </div>
   )
 }
@@ -46,11 +46,11 @@ const App = () => {
       <Header course={course} />
 
       <Content
-        parts={course.parts} 
+        parts={course} 
       />
 
       <Footer
-        parts={course.parts}
+        parts={course}
       />
     </div>
   )

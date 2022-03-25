@@ -9,11 +9,12 @@ const Part = (props) => {
   )
 }
 const Content = (props) => {
+  const items = props.parts.map((part) => {
+    return <Part part ={part} />
+  })
   return (
     <div>
-      { props.parts.map((part) => {
-    return <Part key={part.name} part ={part} />
-  }) }
+      { items }
     </div>
   )
 }
