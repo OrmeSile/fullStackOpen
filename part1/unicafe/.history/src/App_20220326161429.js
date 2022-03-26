@@ -17,7 +17,7 @@ const App = () => {
       <ul>
         <li>good {good}</li>
         <li>neutral {neutral}</li>
-        <li>bad {bad}</li>
+        <li>bad {good}</li>
       </ul>
     </div>
   )
