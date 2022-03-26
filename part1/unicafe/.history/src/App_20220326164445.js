@@ -1,25 +1,18 @@
 import { useState } from 'react'
 
-const StatisticLine = ({ text, value }) => <p>{text} {value}</p>
-
-
 const Statistics = ({ good, neutral, bad }) => {
-  const all = good + neutral + bad;
-  const average = (good - bad) / (good + bad + neutral);
-  const positive = good / (good + bad + neutral) * 100 + ' %';
-
   if (!good && !neutral && !bad) {
     return <p>No feedback given</p>
   }
   return (
-    <div>
-      <StatisticLine text='good' value={good} />
-      <StatisticLine text='neutral' value={neutral} />
-      <StatisticLine text='bad' value={bad} />
-      <StatisticLine text='all' value={all} />
-      <StatisticLine text='average' value={average} />
-      <StatisticLine text = 'positive' value ={positive}/>
-    </div>
+    <ul>
+      <li>good {good}</li>
+      <li>neutral {neutral}</li>
+      <li>bad {bad}</li>
+      <li>all {good + neutral + bad}</li>
+      <li>average {(good - bad) / (good + bad + neutral)}</li>
+      <li>positive {good / (good + bad + neutral) * 100} %</li>
+    </ul>
   );
 }
 
@@ -36,7 +29,7 @@ const App = () => {
       <h2>give feedback</h2>
       <Button onClick={() => setGood(good +1)} name = 'good'/>
       <Button onClick={() => setNeutral(neutral + 1)} name='neutral' />
-      <Button onClick={() => setBad(bad +1)} name = 'bad'/>
+      <Button onClick={() => setGood(good +1)} name = 'good'/>
       <h2>statistics</h2>
       <Statistics good={good} neutral={neutral} bad={ bad}/>
     </div>
