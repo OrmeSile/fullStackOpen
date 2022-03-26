@@ -18,6 +18,8 @@ const App = () => {
     const copy = [...points];
     copy[value]++;
     setPoints(copy)
+    console.log(copy)
+    console.log(Math.max(points))
   }
   
   const getRandomInt = (max) => Math.floor(Math.random() * max);
@@ -30,7 +32,7 @@ const App = () => {
       <button onClick={() => setSelected(getRandomInt(anecdotes.length - 1))}>next anecdote</button>
       <button onClick={() => vote(selected)}>Vote</button>
       <h2>Anecdote with the most votes</h2>
-      <p>{anecdotes[points.indexOf(Math.max(...points))]}</p>
+      <p>{anecdotes[points.indexOf(Math.max(points))]}</p>
     </div>
   )
 }

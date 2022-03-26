@@ -18,6 +18,8 @@ const App = () => {
     const copy = [...points];
     copy[value]++;
     setPoints(copy)
+    console.log(copy)
+    console.log(Math.max(points));
   }
   
   const getRandomInt = (max) => Math.floor(Math.random() * max);
