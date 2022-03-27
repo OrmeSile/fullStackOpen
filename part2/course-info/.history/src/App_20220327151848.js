@@ -8,12 +8,21 @@ const Part = ({ part }) =>
     {part.name} {part.exercises}
   </p>
 
-const Content = ({ course }) => 
+const Content = ( {course} ) => {
+  console.log(course);
   <div>
-    {course.parts.map((part) => <Part key={part.id} part={part} />)}
+    <Part
+      part={course.parts[0]}
+    />
+    <Part
+      part={course.parts[1]}
+    />
+    <Part
+      part={course.parts[2]}
+    />
   </div>
 
-const Course = ({course}) => {
+  const Course = ({course}) => {
   return(
     <div>
       <Header course={course} />
@@ -45,7 +54,7 @@ const App = () => {
     ]
   }
 
-  return <Course key={course.id} course={course} />
+  return <Course course={course} />
 }
 
 

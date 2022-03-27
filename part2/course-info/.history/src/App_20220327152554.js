@@ -14,11 +14,11 @@ const Content = ({ course }) =>
   </div>
 
 const Course = ({course}) => {
-  return(
-    <div>
-      <Header course={course} />
-      <Content course={course} />
-    </div>
+return(
+  <div>
+    <Header course={course} />
+    <Content course={course} />
+  </div>
   )
 }
 

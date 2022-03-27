@@ -8,12 +8,13 @@ const Part = ({ part }) =>
     {part.name} {part.exercises}
   </p>
 
-const Content = ({ course }) => 
+const Content = ({ course }) => {
   <div>
-    {course.parts.map((part) => <Part key={part.id} part={part} />)}
-  </div>
-
-const Course = ({course}) => {
+  {course.parts.map((part) => <Part key={part.id} part={part} />)}
+    </div>
+  )
+}
+  const Course = ({course}) => {
   return(
     <div>
       <Header course={course} />
