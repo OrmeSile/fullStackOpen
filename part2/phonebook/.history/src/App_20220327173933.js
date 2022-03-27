@@ -7,7 +7,6 @@ const App = () => {
       number: '040-1234567'
     }
   ]) 
-  const [personSearch, setPersonSearch] = useState(persons)
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newSearch, setNewSearch] = useState('')
@@ -37,7 +36,7 @@ const App = () => {
 
   const handleSearchFieldChange = (event) => {
     setNewSearch(event.target.value)
-    setPersonSearch(persons.filter((person) => new RegExp(event.target.value, 'gi').test(person.name)))
+    setPersons(persons.slice())
   }
 
   return (
@@ -66,7 +65,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {personSearch.map((person) => <p key={person.name}>{person.name} {person.number}</p>)}
+      {persons.map((person) => <p key={person.name}>{person.name} {person.number}</p>)}
     </div>
   )
 }

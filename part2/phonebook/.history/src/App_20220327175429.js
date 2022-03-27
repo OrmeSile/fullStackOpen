@@ -37,6 +37,7 @@ const App = () => {
 
   const handleSearchFieldChange = (event) => {
     setNewSearch(event.target.value)
+    console.log();
     setPersonSearch(persons.filter((person) => new RegExp(event.target.value, 'gi').test(person.name)))
   }
 
