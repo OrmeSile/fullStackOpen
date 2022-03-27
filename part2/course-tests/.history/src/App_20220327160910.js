@@ -8,7 +8,7 @@ const App = (props) => {
   
   const notesToShow = showAll
     ? notes
-    : notes.filter(note => note.important)
+    : notes.filter(note => note.important === true)
 
 
   const addNote = (event) => {
@@ -32,13 +32,8 @@ const App = (props) => {
   return (
     <div>
       <h1>Notes</h1>
-      <div>
-        <button onClick={() => setShowAll(!showAll)}>
-          show {showAll ? 'important' : 'all'}
-        </button>
-      </div>
       <ul>
-        {notesToShow.map(note =>
+        {notes.map(note =>
           <Note key={note.id} note={note} />
         )}
       </ul>
