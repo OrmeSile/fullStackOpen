@@ -68,10 +68,9 @@ const App = () => {
         .filter((person) => new RegExp(newSearch, 'gi')
         .test(person.name))
         .map((person) =>
-          <p key={person.name}>
-            {person.name} {person.number}
-          </p>)
-      }
+        <p key={person.name}>
+        {person.name} {person.number}
+      </p>)}
     </div>
   )
 }

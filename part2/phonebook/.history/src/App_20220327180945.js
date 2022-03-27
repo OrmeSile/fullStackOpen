@@ -69,9 +69,8 @@ const App = () => {
         .test(person.name))
         .map((person) =>
           <p key={person.name}>
-            {person.name} {person.number}
-          </p>)
-      }
+        {person.name} {person.number}
+      </p>)}
     </div>
   )
 }

@@ -66,12 +66,11 @@ const App = () => {
       <h2>Numbers</h2>
       {persons
         .filter((person) => new RegExp(newSearch, 'gi')
-        .test(person.name))
-        .map((person) =>
-          <p key={person.name}>
-            {person.name} {person.number}
-          </p>)
-      }
+          .test(person.name))
+          map((person) =>
+        <p key={person.name}>
+        {person.name} {person.number}
+      </p>)}
     </div>
   )
 }
