@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom'
 import App from './App'
 
+
 const notes = [
   {
     id: 1,
@@ -23,6 +24,6 @@ const notes = [
 ]
 
 ReactDOM.render(
-  <App />,
+  <App notes={notes} />,
   document.getElementById('root')
 )

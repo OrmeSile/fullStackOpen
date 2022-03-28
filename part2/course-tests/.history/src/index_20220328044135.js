@@ -1,6 +1,8 @@
 import ReactDOM from 'react-dom'
 import App from './App'
+import axios from 'axios'
 
+const promise = axios.get
 const notes = [
   {
     id: 1,
@@ -23,6 +25,6 @@ const notes = [
 ]
 
 ReactDOM.render(
-  <App />,
+  <App notes={notes} />,
   document.getElementById('root')
 )

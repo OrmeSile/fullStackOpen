@@ -16,7 +16,7 @@ const App = () => {
         setNotes(response.data)
       })
   }, [])
-  console.log('render', notes.length, 'notes')
+  console.log('render', notes.length)
   
   const notesToShow = showAll
     ? notes

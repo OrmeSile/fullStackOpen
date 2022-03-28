@@ -14,9 +14,8 @@ const App = () => {
       .then(response => {
         console.log('promise fulfilled')
         setNotes(response.data)
-      })
-  }, [])
-  console.log('render', notes.length, 'notes')
+    })
+  })
   
   const notesToShow = showAll
     ? notes
