@@ -1,3 +1,0 @@
-coonst Persons = (props) => {
-  
-}

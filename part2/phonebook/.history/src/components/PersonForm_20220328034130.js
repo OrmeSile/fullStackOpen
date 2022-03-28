@@ -1,5 +1,0 @@
-const personForm = (props) => {
-    return (
-        
-    )
-}

@@ -1,1 +1,0 @@
-const Person = ({name, number})
