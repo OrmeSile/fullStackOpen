@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import PersonForm from './components/PersonForm'
+import Person from './components/Person'
 import Filter from './components/Filter'
-import Persons from './components/Persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -59,8 +59,7 @@ const App = () => {
       <h2>Numbers</h2>
       <Persons 
         persons={persons}
-        newSearch={newSearch}
-      />
+      
     </div>
   )
 }
