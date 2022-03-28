@@ -85,15 +85,12 @@ function App() {
 
   const weatherApiKey = process.env.REACT_APP_API_KEY
   useEffect(() => {
-    console.log(filteredCountries.length)
     if (filteredCountries.length === 1) {
       axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${filteredCountries[0].capital[0]}&limit=1&appid=${weatherApiKey}`)
         .then(response => {
           const url = `https://api.openweathermap.org/data/2.5/weather?lat=${response.data[0].lat}&lon=${response.data[0].lon}&units=metric&appid=${weatherApiKey}`
-          console.log(url)
           axios.get(url)
             .then(r => {
-              console.log(r)
               const newWeatherInfo = {
                 temperature: r.data.main.temp,
                 icon: r.data.weather[0].icon,
@@ -102,7 +99,6 @@ function App() {
               setWeatherInfo(newWeatherInfo)
             })
         })
-      console.log(weatherInfo);
     }
     },[filteredCountries])
   
