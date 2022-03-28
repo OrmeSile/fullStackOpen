@@ -11,7 +11,7 @@ const Filter = ({ filter, onChange }) => {
 
 const Languages = ({ languages }) => Object.values(languages).map((language) => <p>{language}</p>)
 
-const Country = ({ country, setWeatherInfo, weatherInfo }) => {
+const Country = ({ country, weatherInfo }) => {
   
   return (
     <div>
