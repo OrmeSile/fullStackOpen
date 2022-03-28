@@ -11,10 +11,8 @@ const Filter = ({ filter, onChange }) => {
 
 const Languages = ({ languages }) => Object.values(languages).map((language) => <p>{language}</p>)
 
-const Country = ({ country }) => {
-  if (country.length > 1) {
-    return country.map((countr) => <p>{ countr.name}</p>)
-  } 
+const Country = ({ country, setWeatherInfo, weatherInfo }) => {
+  
   return (
     <div>
       <h3>{country.name}</h3>
@@ -28,16 +26,25 @@ const Country = ({ country }) => {
         <Languages languages = {country.languages} />
       </ul>
       <img src={country.flag} alt='flag' />
+      <div>
+        <h4>Weather in {country.capital[0]}</h4>
+        <p>temperature {weatherInfo.temperature}</p>
+        <img src={`http://openweathermap.org/img/wn/${weatherInfo.icon}@2x.png`} alt='weather icon' />
+        <p>wind { weatherInfo.windSpeed} m/s</p>
+      </div>
     </div>
   )
 }
 
-const Countries = ({ filter, filteredCountries, handleShowCountry}) => {
-
+const Countries = ({ filter, filteredCountries, handleShowCountry, setWeatherInfo, weatherInfo}) => {
 
   if (filteredCountries.length === 1) {
     return <div>
-      <Country country={filteredCountries[0]} />
+      <Country
+        country={filteredCountries[0]}
+        setWeatherInfo={setWeatherInfo}
+        weatherInfo={weatherInfo}
+        />
     </div>
   } else if (filteredCountries.length <= 10) {
     return (
@@ -65,6 +72,7 @@ function App() {
   const [filter, setFilter] = useState('')
   const [countries, setCountries] = useState([])
   const [filteredCountries, setFilteredCountries] = useState([])
+  const [weatherInfo, setWeatherInfo] = useState([])
 
   const handleFilter = (event) => {
     setFilter(event.target.value)
@@ -72,9 +80,32 @@ function App() {
   }
   const handleShowCountry = (event) => {
     event.preventDefault()
-    console.log(event)
     setFilteredCountries(countries.filter(country => country.name === event.target.textContent))
   }
+
+  const weatherApiKey = process.env.REACT_APP_API_KEY
+  useEffect(() => {
+    console.log(filteredCountries.length)
+    if (filteredCountries.length === 1) {
+      axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${filteredCountries[0].capital[0]}&limit=1&appid=${weatherApiKey}`)
+        .then(response => {
+          const url = `https://api.openweathermap.org/data/2.5/weather?lat=${response.data[0].lat}&lon=${response.data[0].lon}&units=metric&appid=${weatherApiKey}`
+          console.log(url)
+          axios.get(url)
+            .then(r => {
+              console.log(r)
+              const newWeatherInfo = {
+                temperature: r.data.main.temp,
+                icon: r.data.weather[0].icon,
+                windSpeed: r.data.wind.speed
+              }
+              setWeatherInfo(newWeatherInfo)
+            })
+        })
+      console.log(weatherInfo);
+    }
+    },[filteredCountries])
+  
   useEffect(() => {
     axios
       .get('https://restcountries.com/v3.1/all')
@@ -98,7 +129,9 @@ function App() {
         countries={countries}
         filter={filter}
         filteredCountries={filteredCountries}
-        handleShowCountry ={handleShowCountry}
+        handleShowCountry={handleShowCountry}
+        weatherInfo={weatherInfo}
+        setWeatherInfo={setWeatherInfo}
       />
     </div>
   );
