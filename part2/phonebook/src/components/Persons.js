@@ -1,6 +1,6 @@
 import Person from "./Person"
 
-const Persons = ({ newSearch, persons }) => {
+const Persons = ({ newSearch, persons, handleDelete }) => {
   return (
     persons
       .filter((person) => new RegExp(newSearch, 'gi')
@@ -9,6 +9,7 @@ const Persons = ({ newSearch, persons }) => {
         <Person
           key={person.name}
           person={person}
+          handleDelete={handleDelete}
         />)
   )
 }
