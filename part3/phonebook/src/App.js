@@ -3,6 +3,7 @@ import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import Persons from './components/Persons'
 import personService from './services/persons'
+import Person from './components/Person'
 
 const Notification = ({ info }) => {
   
@@ -55,10 +56,12 @@ const App = () => {
     const personObject = {
       name: newName,
       number: newNumber,
-      id: persons[persons.length -1].id + 1
     }
+
     if (persons.map((person) => person.name).includes(personObject.name)) {
-      if (window.confirm(`${newName} is already added to phonebook, replace the old number with the new one ? `)) {
+
+      const popup = window.confirm(`${newName} is already added to phonebook, replace the old number with the new one ? `)
+      if (popup) {
         const dbPerson = persons.find((person) => person.name === newName)
         personService.update(dbPerson.id, { ...dbPerson, number: newNumber })
           .then(response => setPersons(persons.map(person => person.id !== dbPerson.id ? person : response)))
@@ -74,6 +77,8 @@ const App = () => {
           setTimeout(() => {
             setNewMessage([0, ''])
           }, 3000)
+        }).catch(error => {
+          console.log(error)
         })
     }
     setNewName('')
