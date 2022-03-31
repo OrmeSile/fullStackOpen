@@ -5,6 +5,7 @@ const cors = require('cors')
 const app = express()
 app.use(express.json())
 app.use(cors())
+app.use(express.static('build'))
 
 morgan.token('body', (req) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] :response-time ms :body'))
@@ -99,7 +100,7 @@ const foundPerson = persons.find(person => person.name === body.name)
   res.json(person)
 })
 
-const PORT = 3001
+const PORT = process.env.PORT  || 3001
 app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`);
 })
