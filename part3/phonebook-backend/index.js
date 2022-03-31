@@ -57,11 +57,11 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.delete('/api/persons/:id', (req, res) => {
   const id = Number(req.params.id)
-  const person = persons.find(note => note.id === id)
+  const person = persons.find(person => person.id === id)
 
   if (person) {
     persons = persons.filter(person => person.id !== id)
-    response.status(204).end()
+    res.status(204).end()
   }
 })
 

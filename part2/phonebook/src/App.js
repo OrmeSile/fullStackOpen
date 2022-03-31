@@ -92,16 +92,18 @@ const App = () => {
     setNewSearch(event.target.value)
   }
   const handleDelete = (id) => {
-    personService.remove(id).catch(e => {
-      const personName = persons.find(person => person.id === id)
+    personService.remove(id)
+      .then(setPersons(persons.filter(p => p.id !== id)))
+      .catch(e => {
+      const personName = persons.find(person => person.id === id).name
       setNewMessage(
-        [-1, `${personName.name} was already deleted`]
+        [-1, `${personName} was already deleted`]
       )
+      setPersons(persons.filter(p => p.id !== id))
       setTimeout(() => {
         setNewMessage([0, ''])
       }, 3000)
     } )
-    setPersons(persons.filter(p => p.id !== id))
   }
 
   return (
