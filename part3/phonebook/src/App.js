@@ -3,7 +3,6 @@ import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import Persons from './components/Persons'
 import personService from './services/persons'
-import Person from './components/Person'
 
 const Notification = ({ info }) => {
   
@@ -41,16 +40,17 @@ const Notification = ({ info }) => {
 
 const App = () => {
 
-  useEffect(() => {
-    personService.getAll().then(initialPersons => setPersons(initialPersons))
-      }, [])
-
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newSearch, setNewSearch] = useState('')
-  const [displayMessage, setNewMessage] = useState([0,''])
-
+  const [displayMessage, setNewMessage] = useState([0, ''])
+  
+  useEffect(() => {
+    personService.getAll().then(initialPersons => setPersons(initialPersons))
+  }, [])
+  console.log(persons)
+  
   const addPerson = (event) => {
     event.preventDefault()
     const personObject = {
@@ -61,16 +61,25 @@ const App = () => {
     if (persons.map((person) => person.name).includes(personObject.name)) {
 
       const popup = window.confirm(`${newName} is already added to phonebook, replace the old number with the new one ? `)
+
       if (popup) {
-        const dbPerson = persons.find((person) => person.name === newName)
-        personService.update(dbPerson.id, { ...dbPerson, number: newNumber })
-          .then(response => setPersons(persons.map(person => person.id !== dbPerson.id ? person : response)))
+        const dbPerson = persons.filter(person => person.name === newName)[0]
+        personService
+          .update(dbPerson.id, { ...dbPerson[0], number: newNumber })
+          .then(response => {
+            setPersons(persons.map (
+                person => person.id === dbPerson.id
+                  ? response
+                  : person
+              )
+            )
+          })
       }
     } else {
-      setPersons(persons.concat(personObject))
       personService
         .create(personObject)
         .then(person => {
+          setPersons(persons.concat(person))
           setNewMessage(
             [1, `Added ${person.name}`]
           )

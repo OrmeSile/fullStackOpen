@@ -21,11 +21,13 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/info', (req, res) => {
-  const info = (
-    `<p>Phonebook has info for ${persons.length} people</p>
-    ${ new Date() }`
-  )
-  res.send(info)
+  Person.find({}).then(persons => {
+    const info = (
+      `<p>Phonebook has info for ${persons.length} people</p>
+      ${ new Date() }`
+    )
+    res.send(info)
+  })
 })
 
 app.get('/api/persons/:id', (req, res, next) => {
@@ -74,9 +76,11 @@ app.post('/api/persons', (req, res) => {
 app.put('/api/persons/:id', (req, res, next) => {
   const body = req.body
 
-  const person = {
-    number: body.number,
-  }
+
+  const person = { 
+    name: body.name,
+    number: body.number
+   }
 
   Person.findByIdAndUpdate(req.params.id , person, { new: true })
     .then(updatedPerson => {
@@ -91,7 +95,7 @@ app.listen(PORT, () => {
 })
 
 const unknownEndpoint = (req, res) => {
-  response.status(404).send({ error: 'unknown endpoint' })
+  res.status(404).send({ error: 'unknown endpoint' })
 }
 
 app.use(unknownEndpoint)
