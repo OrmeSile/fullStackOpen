@@ -5,13 +5,11 @@ const PersonForm = ({ addPerson, newName, newNumber, handleNameChange, handleNum
           name: <input 
             value={newName}
             onChange={handleNameChange}
-            required={true}
           />
           <div>
             number: <input 
               value={newNumber}
               onChange={handleNumberChange}
-              required={true}
             />
           </div>
         </div>

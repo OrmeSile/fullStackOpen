@@ -49,7 +49,7 @@ const App = () => {
   useEffect(() => {
     personService.getAll().then(initialPersons => setPersons(initialPersons))
   }, [])
-  console.log(persons)
+
   
   const addPerson = (event) => {
     event.preventDefault()
@@ -73,6 +73,16 @@ const App = () => {
                   : person
               )
             )
+          }).catch(err => {
+            setNewMessage(
+              [-1, err.response.data]
+            )
+            setTimeout(() => {
+              setNewMessage(
+                [0, '']
+              )
+              
+            }, 3000);
           })
       }
     } else {
@@ -86,10 +96,15 @@ const App = () => {
           setTimeout(() => {
             setNewMessage([0, ''])
           }, 3000)
-        }).catch(error => {
-          console.log(error)
-        })
-    }
+        }).catch(err => {
+          setNewMessage(  
+            [-1, err.response.data]
+          )
+          setTimeout(() => {
+            setNewMessage([0, ''])
+          }, 3000)
+          })
+        }
     setNewName('')
     setNewNumber('')
   }
