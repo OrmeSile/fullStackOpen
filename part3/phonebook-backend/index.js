@@ -4,7 +4,6 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./models/Person')
-const { response } = require('express')
 
 const app = express()
 app.use(express.static('build'))
@@ -16,8 +15,8 @@ app.use(morgan(':method :url :status :res[content-length] :response-time ms :bod
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => {
-      response.json(persons)
-    })
+    response.json(persons)
+  })
 })
 
 app.get('/info', (req, res) => {
@@ -41,11 +40,11 @@ app.get('/api/persons/:id', (req, res, next) => {
       }
     })
     .catch(error => next(error))
-  })
+})
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
-    .then(result => {
+    .then(() => {
       res.status(204).end()
     })
     .catch(error => next(error))
@@ -72,11 +71,11 @@ app.post('/api/persons', (req, res, next) => {
   person.save()
     .then(savedPerson => {
       res.json(savedPerson)
-  }).catch(error => next(error))
+    }).catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
-  const {name, number} = req.body
+  const { name, number } = req.body
 
   Person.findByIdAndUpdate(
     req.params.id,
@@ -91,7 +90,7 @@ app.put('/api/persons/:id', (req, res, next) => {
 
 const PORT = process.env.PORT  || 3001
 app.listen(PORT, () => {
-  console.log(`server running on port ${PORT}`);
+  console.log(`server running on port ${PORT}`)
 })
 
 const unknownEndpoint = (req, res) => {
