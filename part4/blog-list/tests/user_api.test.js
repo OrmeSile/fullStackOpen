@@ -9,8 +9,7 @@ describe('users', () => {
   beforeEach(async () => {
     await User.deleteMany({})
 
-    const user = await new User(helper.initialUser)
-    user.save()
+    await new User(helper.initialUser).save()
   })
   test('are returned as JSON', async () => {
     await api
@@ -39,21 +38,35 @@ describe('users', () => {
     expect(response.body).toEqual({ error: 'invalid username' })
   })
   test('cannot be created without a password', async () => {
+    const initialUsers = await helper.usersInDB()
+    console.log(initialUsers)
     const user = {
-      username: 'hi',
+      username: 'hif',
       name: 'blabla'
     }
     const response = await api.post('/api/users').send(user)
+    const afterState = await helper.usersInDB()
     expect(response.status).toBe(400)
     expect(response.body).toEqual({ error: 'invalid password' })
+    expect(initialUsers).toEqual(afterState)
   })
   test('passwords need to be longer than 3 characters', async () => {
     const user = {
       username: 'hello',
       password: 'hi'
     }
-    const response = api.post('/api/users').send(user)
-    expect(response.status).toBe(400)
+    const response = await api.post('/api/users').send(user)
+    expect(response.error.status).toBe(400)
+  })
+  test('cannot be created without an username', async () => {
+    const initialState = await helper.usersInDB()
+    const user = {
+      password: 'secret'
+    }
+    const response = await api.post('/api/users').send(user)
+    const afterState = await helper.usersInDB()
+    expect(response.error.status).toBe(400)
+    expect(initialState).toEqual(afterState)
   })
 })
 

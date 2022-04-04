@@ -10,7 +10,7 @@ usersRouter.get('/', async (request, response) => {
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
   if (!password || password.length < 3) {
-    return response.status(400).json({ error: 'invalid password' })
+    return response.status(400).json({ error: 'invalid password' }).end()
   }
   const dbUser = await User.findOne({ username: username })
   if (dbUser) {
