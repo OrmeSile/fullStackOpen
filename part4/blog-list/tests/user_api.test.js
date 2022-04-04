@@ -1,0 +1,62 @@
+const mongoose = require('mongoose')
+const supertest = require('supertest')
+const app = require('../app')
+const helper = require('./test_helper')
+const api = supertest(app)
+const User = require('../models/User')
+
+describe('users', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    const user = await new User(helper.initialUser)
+    user.save()
+  })
+  test('are returned as JSON', async () => {
+    await api
+      .get('/api/users')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  test('can be created with a new username', async () => {
+    const user = {
+      username: 'hello',
+      name: 'mel',
+      password: 'secrets'
+    }
+    const response = await api.post('/api/users').send(user)
+    expect(response.status).toBe(201)
+    expect(response.body.username).toEqual(user.username)
+  })
+  test('cannot be created with an existing username', async () => {
+    const user = {
+      username: 'root',
+      name: 'hello',
+      password: 'secret'
+    }
+    const response = await api.post('/api/users').send(user)
+    expect(response.status).toBe(400)
+    expect(response.body).toEqual({ error: 'invalid username' })
+  })
+  test('cannot be created without a password', async () => {
+    const user = {
+      username: 'hi',
+      name: 'blabla'
+    }
+    const response = await api.post('/api/users').send(user)
+    expect(response.status).toBe(400)
+    expect(response.body).toEqual({ error: 'invalid password' })
+  })
+  test('passwords need to be longer than 3 characters', async () => {
+    const user = {
+      username: 'hello',
+      password: 'hi'
+    }
+    const response = api.post('/api/users').send(user)
+    expect(response.status).toBe(400)
+  })
+})
+
+afterAll(() => {
+  mongoose.connection.close()
+})

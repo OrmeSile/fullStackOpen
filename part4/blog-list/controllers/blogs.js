@@ -10,7 +10,7 @@ blogsRouter.get('/',async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   const blog = new Blog(request.body)
   if (!blog.url && !blog.title) {
-    response.status(400).json({error: 'title or url required'})
+    response.status(400).json({ error: 'title or url required' })
   } else {
     const blogPost = await blog.save()
     response.status(201).json(blogPost)
@@ -19,7 +19,21 @@ blogsRouter.post('/', async (request, response) => {
 
 blogsRouter.get('/:id', async (request, response) => {
   const blog = await Blog.findById(request.params.id)
-  response.status(200).json(blog)
+  if (blog) {
+    response.status(200).json(blog)
+  } else {
+    response.status(404).end()
+  }
+})
+
+blogsRouter.delete('/:id', async (request, response) => {
+  await Blog.findByIdAndRemove(request.params.id)
+  response.status(204).end()
+})
+
+blogsRouter.put('/:id', async (request, response) => {
+  await Blog.findByIdAndUpdate(request.params.id, request.body)
+  response.status(200).json(response.body)
 })
 
 module.exports = blogsRouter
