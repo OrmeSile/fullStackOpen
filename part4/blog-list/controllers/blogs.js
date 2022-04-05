@@ -34,7 +34,7 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.get('/:id', async (request, response) => {
-  const blog = await Blog.findById(request.params.id).populate('user')
+  const blog = await Blog.findById(request.params.id).populate('user', { username: 1, name: 1 })
   if (blog) {
     response.status(200).json(blog)
   } else {
@@ -48,8 +48,15 @@ blogsRouter.delete('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id)
-  response.status(204).end()
+  const token = request.token
+  const decodedToken = jwt.decode(token, process.env.SECRET)
+  const blog = await Blog.findById(request.params.id).populate('user', { username: 1, name: 1 })
+
+  if (blog.user._id.toString() !== decodedToken.id) {
+    return response.status(401).send()
+  }
+  await Blog.findByIdAndDelete(request.params.id)
+  response.status(204).send()
 })
 
 blogsRouter.put('/:id', async (request, response) => {

@@ -68,7 +68,6 @@ describe('users', () => {
     expect(initialState).toEqual(afterState)
   })
   test('can login', async () => {
-    console.log(await User.findOne({}))
     const { username, password } = helper.initialUser
     const response = await api.post('/api/login')
       .send({ username, password })
@@ -77,11 +76,17 @@ describe('users', () => {
 })
 
 describe('users and blogs --- ', () => {
+  let token
   beforeEach(async () => {
     await Blog.deleteMany({})
     await User.deleteMany({})
     await api.post('/api/users').send(helper.initialUser)
-    await api.post('/api/blogs').send(helper.newBlog)
+    const { username, password } = helper.initialUser
+    const login = await api.post('/api/login').send({ username, password })
+    token = login.body.token
+    await api.post('/api/blogs')
+      .set('authorization', `Bearer ${token}`)
+      .send(helper.newBlog)
   })
   test('users have blogs associated with them', async () => {
     const response = await api.get('/api/users')

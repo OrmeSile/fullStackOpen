@@ -6,11 +6,17 @@ const api = supertest(app)
 const Blog = require('../models/Blog')
 const User = require ('../models/User')
 
+let token
+
 beforeEach(async () => {
   await Blog.deleteMany({})
   await User.deleteMany({})
-
-  const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
+  const user = await api.post('/api/users').send(helper.initialUser)
+  const { username, password } = helper.initialUser
+  const login = await api.post('/api/login').send({ username, password })
+  token = login.body.token
+  const dbUser = await User.findById(user.body.id)
+  const blogObjects = helper.initialBlogs.map(blog => new Blog({ ...blog, user: dbUser._id }))
   const blogs = blogObjects.map(blog => blog.save())
   await Promise.all(blogs)
 })
@@ -37,7 +43,9 @@ describe('blogs in database', () => {
 describe('posted blogs', () => {
   test('are successfully created', async () => {
     const initialBlogs = await helper.blogsInDB()
-    await api.post('/api/blogs').send(helper.newBlog)
+    await api.post('/api/blogs')
+      .set('authorization', `Bearer ${token}`)
+      .send(helper.newBlog)
     const response = await api.get('/api/blogs')
     expect(response.body.length).toBe(initialBlogs.length + 1)
   })
@@ -58,26 +66,49 @@ describe('posted blogs', () => {
     expect(response.body.likes).toEqual(0)
   })
   test('return 400 when both url and title are empty', async () => {
-    const response = await api.post('/api/blogs', { author: 'me' })
+    const response = await api.post('/api/blogs')
+      .set('authorization', `Bearer ${token}`)
+      .send({ author: 'me' })
     expect(response.status).toBe(400)
   })
 })
 
-test('deleting an individual blog post works', async () => {
-  const blogs = await helper.blogsInDB()
-  const blogToDelete = blogs[0]
-  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
-}, 10000)
+describe('deleting', () => {
+  test('an individual blog post works', async () => {
+    const blogs = await helper.blogsInDB()
+    const blogToDelete = blogs[0]
+    const response = await api.delete(`/api/blogs/${blogToDelete.id}`)
+      .set('authorization', `Bearer ${token}`)
+    const blogsAfter = await helper.blogsInDB()
+    expect(response.status).toBe(204)
+    expect(blogsAfter.length).toBe(blogs.length -1)
+  })
+  test('blogs can only be done by user that created it', async () => {
+    const blogs = await helper.blogsInDB()
+    const blogToDelete = blogs[0]
+    const newUser = { username: 'hacker', password: 'elite' }
+    await api.post('/api/users')
+      .send(newUser)
+    const newLogin = await api.post('/api/login')
+      .send(newUser)
+    const newToken = newLogin.body.token
+    await api.delete(`/api/blogs/${blogToDelete.id}`)
+      .set('authorization', `Bearer ${newToken}`)
+      .expect(401)
+  })
+})
 
 test('updating an individual blog post works', async () => {
   const blogs = await helper.blogsInDB()
   const blogToUpdate = blogs[0]
   const modifiedBlog = { ...blogToUpdate, likes: 150 }
-  const response = await api.put(`/api/blogs/${modifiedBlog.id}`).send(modifiedBlog)
+  const response = await api.put(`/api/blogs/${modifiedBlog.id}`)
+    .send(modifiedBlog)
   const modifiedBlogInDb = await Blog.findById(blogToUpdate.id)
   expect(response.status).toBe(200)
   expect(modifiedBlogInDb.likes).toEqual(modifiedBlog.likes)
 })
+
 
 test('return a blog with user attached when queried', async () => {
   const user = await new User(helper.initialUser).save()
@@ -86,7 +117,7 @@ test('return a blog with user attached when queried', async () => {
   const response = await api.get('/api/blogs')
   const lastAddedBlog = response.body[response.body.length - 1]
   const processedUser = JSON.parse(JSON.stringify(user))
-  expect(processedUser).toEqual(lastAddedBlog.user)
+  expect(processedUser.name).toEqual(lastAddedBlog.user.name)
 })
 
 

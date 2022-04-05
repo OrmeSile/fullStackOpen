@@ -6,13 +6,15 @@ const initialBlogs = [
     title: 'hey',
     author: 'me',
     url: 'localhost',
-    likes: 10
+    likes: 10,
+    user: '',
   },
   {
     title: 'listen',
     author: 'you',
     url: 'distant',
-    likes: 5
+    likes: 5,
+    user: '',
   }
 ]
 
@@ -21,13 +23,13 @@ const newBlog =
   title: 'majora',
   author: 'ganon',
   url: 'gerudo',
-  likes: 1
+  likes: 1,
 }
 
 const initialUser = {
   username: 'root',
   name: 'root',
-  password: 'secret'
+  password: 'secret',
 }
 
 const nonExistingId = async () => {
@@ -36,7 +38,7 @@ const nonExistingId = async () => {
       title: 'link',
       author: 'zelda',
       url: 'hyrule',
-      likes: 50
+      likes: 50,
     }
   )
   await blog.save()
