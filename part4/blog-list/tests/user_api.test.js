@@ -9,8 +9,7 @@ const Blog = require('../models/Blog')
 describe('users', () => {
   beforeEach(async () => {
     await User.deleteMany({})
-
-    await new User(helper.initialUser).save()
+    await api.post('/api/users').send(helper.initialUser)
   })
   test('are returned as JSON', async () => {
     await api
@@ -50,7 +49,7 @@ describe('users', () => {
     expect(response.body).toEqual({ error: 'invalid password' })
     expect(initialUsers).toEqual(afterState)
   })
-  test('passwords need to be longer than 3 characters', async () => {
+  test('password needs to be longer than 3 characters', async () => {
     const user = {
       username: 'hello',
       password: 'hi'
@@ -68,13 +67,20 @@ describe('users', () => {
     expect(response.error.status).toBe(400)
     expect(initialState).toEqual(afterState)
   })
+  test('can login', async () => {
+    console.log(await User.findOne({}))
+    const { username, password } = helper.initialUser
+    const response = await api.post('/api/login')
+      .send({ username, password })
+    expect(response.status).toBe(200)
+  })
 })
 
 describe('users and blogs --- ', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
     await User.deleteMany({})
-    await new User(helper.initialUser).save()
+    await api.post('/api/users').send(helper.initialUser)
     await api.post('/api/blogs').send(helper.newBlog)
   })
   test('users have blogs associated with them', async () => {
