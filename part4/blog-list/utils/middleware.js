@@ -29,15 +29,13 @@ const tokenExtractor = (request, response, next) => {
 
 const userExtractor = async (request, response, next) => {
   const token = request.token
-  console.log('token',token)
   if (!token) {
     return next()
   }
   const decodedToken = jwt.decode(token, process.env.SECRET)
   const user = await User.findById(decodedToken.id)
-  const processedUser = 
-  request.user = user
-  console.log(request.user)
+  const processedUser = JSON.parse(JSON.stringify(user))
+  request.user = processedUser
   next()
 }
 
