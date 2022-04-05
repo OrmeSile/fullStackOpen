@@ -40,7 +40,6 @@ describe('users', () => {
   })
   test('cannot be created without a password', async () => {
     const initialUsers = await helper.usersInDB()
-    console.log(initialUsers)
     const user = {
       username: 'hif',
       name: 'blabla'
@@ -59,7 +58,7 @@ describe('users', () => {
     const response = await api.post('/api/users').send(user)
     expect(response.error.status).toBe(400)
   })
-  test('cannot be created without an username', async () => {
+  test('cannot be created without a username', async () => {
     const initialState = await helper.usersInDB()
     const user = {
       password: 'secret'
@@ -71,16 +70,18 @@ describe('users', () => {
   })
 })
 
-describe('users and blogs', () => {
+describe('users and blogs --- ', () => {
   beforeEach(async () => {
-    await User.deleteMany({})
     await Blog.deleteMany({})
+    await User.deleteMany({})
+    await new User(helper.initialUser).save()
+    await api.post('/api/blogs').send(helper.newBlog)
   })
-  test('have blogs associated with them', async () => {
-    const blogs = await helper.initialBlogs.map(blog => new Blog(blog).save())
-    await new User({ ...helper.initialUser, blogs: blogs }).save()
-    const userInDb = await api.get('/api/users')
-    expect(userInDb.blogs).toContainEqual(blogs)
+  test('users have blogs associated with them', async () => {
+    const response = await api.get('/api/users')
+    const { author, id, title, url } = await Blog.findOne({})
+    expect(response.body[0].blogs.length).toBe(1)
+    expect(response.body[0].blogs).toContainEqual({ author, id, title, url })
   })
 })
 afterAll(() => {

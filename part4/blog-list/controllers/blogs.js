@@ -4,20 +4,23 @@ const User = require('../models/User')
 
 
 blogsRouter.get('/',async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', { name: 1, username: 1 })
+  const blogs = await Blog.find({}).populate(
+    'user', { username: 1, name: 1 }
+  )
   response.status(200).json(blogs)
 })
 
 blogsRouter.post('/', async (request, response) => {
   const user = await User.findOne({})
   const blog = new Blog({ ...request.body, user: user._id })
+
   if (!blog.url && !blog.title) {
-    response.status(400).json({ error: 'title or url required' })
+    return response.status(400).json({ error: 'title or url required' })
   } else {
     const savedBlog = await blog.save()
     user.blogs = user.blogs.concat(savedBlog._id)
     await user.save()
-    response.status(201).json(savedBlog)
+    return response.status(201).json(savedBlog)
   }
 })
 

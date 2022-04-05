@@ -8,6 +8,7 @@ const User = require ('../models/User')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
+  await User.deleteMany({})
 
   const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
   const blogs = blogObjects.map(blog => blog.save())
@@ -78,7 +79,7 @@ test('updating an individual blog post works', async () => {
   expect(modifiedBlogInDb.likes).toEqual(modifiedBlog.likes)
 })
 
-test('return a with full user attached when queried', async () => {
+test('return a blog with user attached when queried', async () => {
   const user = await new User(helper.initialUser).save()
   const blog = await new Blog({ ...helper.newBlog, user: user._id })
   await blog.save()
