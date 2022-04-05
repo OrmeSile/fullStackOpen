@@ -4,6 +4,7 @@ const app = require('../app')
 const helper = require('./test_helper')
 const api = supertest(app)
 const Blog = require('../models/Blog')
+const User = require ('../models/User')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -76,6 +77,17 @@ test('updating an individual blog post works', async () => {
   expect(response.status).toBe(200)
   expect(modifiedBlogInDb.likes).toEqual(modifiedBlog.likes)
 })
+
+test('return a with full user attached when queried', async () => {
+  const user = await new User(helper.initialUser).save()
+  const blog = await new Blog({ ...helper.newBlog, user: user._id })
+  await blog.save()
+  const response = await api.get('/api/blogs')
+  const lastAddedBlog = response.body[response.body.length - 1]
+  const processedUser = JSON.parse(JSON.stringify(user))
+  expect(processedUser).toEqual(lastAddedBlog.user)
+})
+
 
 afterAll(() => {
   mongoose.connection.close()

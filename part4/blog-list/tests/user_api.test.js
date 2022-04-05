@@ -4,6 +4,7 @@ const app = require('../app')
 const helper = require('./test_helper')
 const api = supertest(app)
 const User = require('../models/User')
+const Blog = require('../models/Blog')
 
 describe('users', () => {
   beforeEach(async () => {
@@ -70,6 +71,18 @@ describe('users', () => {
   })
 })
 
+describe('users and blogs', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+    await Blog.deleteMany({})
+  })
+  test('have blogs associated with them', async () => {
+    const blogs = await helper.initialBlogs.map(blog => new Blog(blog).save())
+    await new User({ ...helper.initialUser, blogs: blogs }).save()
+    const userInDb = await api.get('/api/users')
+    expect(userInDb.blogs).toContainEqual(blogs)
+  })
+})
 afterAll(() => {
   mongoose.connection.close()
 })
