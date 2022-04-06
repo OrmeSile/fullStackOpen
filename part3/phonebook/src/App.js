@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import Persons from './components/Persons'
+import Togglable from './components/T'
 import personService from './services/persons'
 
 const Notification = ({ info }) => {

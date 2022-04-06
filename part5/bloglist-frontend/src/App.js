@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -42,6 +43,8 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
 
+  const blogFormRef = useRef()
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
@@ -69,15 +72,19 @@ const App = () => {
   }
 
   const createBlogForm = () => {
-    return <BlogForm
-      title={title}
-      author={author}
-      url={url}
-      setTitle={setTitle}
-      setAuthor={setAuthor}
-      setUrl={setUrl}
-      handleCreate={handleCreate}
-    />
+    return (
+      <Togglable buttonLabel='new blog' ref ={blogFormRef}>
+        <BlogForm
+          title={title}
+          author={author}
+          url={url}
+          setTitle={setTitle}
+          setAuthor={setAuthor}
+          setUrl={setUrl}
+          handleCreate={handleCreate}
+        />
+      </Togglable>
+    )
   }
 
   const handleLogin = async (event) => {
@@ -126,6 +133,7 @@ const App = () => {
   const handleCreate = async (event) => {
     event.preventDefault()
     try {
+      blogFormRef.current.toggleVisibility()
       const blog = await blogService.create({ title, author, url })
       setSuccessMessage(`created blog entry ${title} by author ${author}`)
       setTimeout(() => {

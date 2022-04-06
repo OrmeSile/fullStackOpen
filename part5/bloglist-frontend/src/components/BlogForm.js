@@ -1,7 +1,15 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 
-const BlogForm = ({ title, author, url, setTitle, setAuthor, setUrl, handleCreate }) => {
+const BlogForm = ({
+  title,
+  author,
+  url,
+  setTitle,
+  setAuthor,
+  setUrl,
+  handleCreate
+}) => {
   return (
     <form onSubmit={handleCreate}>
       <div>
