@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
@@ -6,6 +5,7 @@ import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import PropTypes from 'prop-types'
 
 const Message = ({ errorMessage, successMessage }) => {
   const errorStyle = {
@@ -26,7 +26,7 @@ const Message = ({ errorMessage, successMessage }) => {
         {message}
       </p>
     </div>
-  ) 
+  )
 }
 
 const App = () => {
@@ -34,7 +34,7 @@ const App = () => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  
+
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
@@ -42,8 +42,10 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    blogService.getAll().then(blogs => {
+      blogs.sort((a, b) => a.likes - b.likes).reverse()
       setBlogs(blogs)
+    }
     )
   }, [])
 
@@ -74,6 +76,11 @@ const App = () => {
         />
       </Togglable>
     )
+  }
+  const Blogs = () => {
+    return (blogs.map(blog =>
+      <Blog removeBlog={removeBlog} key={blog.id} blog={blog} user={user}/>
+    ))
   }
 
   const handleLogin = async (event) => {
@@ -120,7 +127,6 @@ const App = () => {
   const addBlog = async (blogObject) => {
     try {
       blogFormRef.current.toggleVisibility()
-      console.log('hello')
       const blog = await blogService.create( blogObject )
       setSuccessMessage(`created blog entry ${blogObject.title} by author ${blogObject.author}`)
       setTimeout(() => {
@@ -132,6 +138,17 @@ const App = () => {
       setTimeout(() => {
         setErrorMessage('')
       }, 3000)
+      console.log(e)
+    }
+  }
+  const removeBlog = async (blogObject) => {
+    try {
+      const choiceWindow = window.confirm(`remove blog ${blogObject.title} by ${blogObject.author} ?`)
+      if (choiceWindow) {
+        await blogService.deleteBlog(blogObject)
+        setBlogs(blogs.filter((blog) => blog.id !== blogObject.id))
+      }
+    } catch (e) {
       console.log(e)
     }
   }
@@ -152,15 +169,18 @@ const App = () => {
           </form>
           <h2>blogs</h2>
           <div>
-            {blogs.map(blog =>
-              <Blog key={blog.id} blog={blog} />
-            )}
+            <Blogs/>
           </div>
           {createBlogForm()}
         </div>
       }
     </div>
   )
+}
+
+Message.propTypes = {
+  errorMessage: PropTypes.string,
+  successMessage: PropTypes.string
 }
 
 export default App

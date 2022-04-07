@@ -1,8 +1,8 @@
-/* eslint-disable react/prop-types */
 import { React, useState } from 'react'
 import blogService from '../services/blogs'
+import PropTypes from 'prop-types'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, removeBlog, user }) => {
   const [details, setDetails] = useState(false)
   const [likes, setLikes] = useState(blog.likes)
 
@@ -15,6 +15,8 @@ const Blog = ({ blog }) => {
     padding: '2px 10px'
   }
 
+  const removeButton = () => <button onClick={() => removeBlog(blog)}>remove</button>
+
   const showDetails = () => {
     setDetails(!details)
   }
@@ -23,14 +25,14 @@ const Blog = ({ blog }) => {
     // eslint-disable-next-line no-unused-vars
     const { user, ...rest } = blog
     const newBlog = { ...rest, likes: likes + 1 }
-    await blogService.update(newBlog.id, newBlog)
+    await blogService.update(newBlog)
     setLikes(newBlog.likes)
   }
 
   return (
     <div style={style}>
-      {blog.title} {blog.author}
-      <button onClick={showDetails}>
+      {blog.title} {blog.author} <button
+        onClick={showDetails}>
         {details ? 'hide' : 'view'}
       </button>
       <div style={showWhenVisible}>
@@ -43,9 +45,16 @@ const Blog = ({ blog }) => {
         <div>
           {blog.user.name}
         </div>
+        {user.username === blog.user.username && removeButton()}
       </div>
-    </div>  
+    </div>
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object,
+  removeBlog: PropTypes.func,
+  user: PropTypes.object,
 }
 
 export default Blog

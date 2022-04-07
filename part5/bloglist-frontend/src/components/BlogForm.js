@@ -1,5 +1,5 @@
-/* eslint-disable react/prop-types */
-import {React, useState} from 'react'
+import { React, useState } from 'react'
+import PropTypes from 'prop-types'
 
 const BlogForm = ({ createBlog }) => {
 
@@ -16,24 +16,28 @@ const BlogForm = ({ createBlog }) => {
         url: url,
       }
     )
-  } 
+  }
   return (
     <form onSubmit={addBlog}>
       <div>
         <label htmlFor='title'>title: </label>
-        <input type='text' name='title' value={title} onChange={({target}) => setTitle(target.value)} />
+        <input type='text' name='title' value={title} onChange={({ target }) => setTitle(target.value)} />
       </div>
       <div>
         <label htmlFor='author'>author: </label>
-        <input type='text' name='author' value={author} onChange={({target}) => setAuthor(target.value)} />
+        <input type='text' name='author' value={author} onChange={({ target }) => setAuthor(target.value)} />
       </div>
       <div>
         <label htmlFor='url'>url: </label>
-        <input type='text' name='author' value={url} onChange={({target}) => setUrl(target.value)} />
+        <input type='text' name='author' value={url} onChange={({ target }) => setUrl(target.value)} />
       </div>
       <button type='submit'>create</button>
     </form>
   )
+}
+
+BlogForm.propTypes = {
+  createBlog: PropTypes.func
 }
 
 export default BlogForm
