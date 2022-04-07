@@ -34,10 +34,6 @@ const App = () => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
@@ -57,7 +53,6 @@ const App = () => {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
       blogService.setToken(user.token)
-
     }
   }, [])
 
@@ -75,13 +70,7 @@ const App = () => {
     return (
       <Togglable buttonLabel='new blog' ref ={blogFormRef}>
         <BlogForm
-          title={title}
-          author={author}
-          url={url}
-          setTitle={setTitle}
-          setAuthor={setAuthor}
-          setUrl={setUrl}
-          handleCreate={handleCreate}
+          createBlog={addBlog}
         />
       </Togglable>
     )
@@ -89,9 +78,7 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-
     console.log('logging with', username, password)
-
     try {
       const user = await loginService.login({
         username, password,
@@ -130,21 +117,18 @@ const App = () => {
       }, 3000)
     }
   }
-  const handleCreate = async (event) => {
-    event.preventDefault()
+  const addBlog = async (blogObject) => {
     try {
       blogFormRef.current.toggleVisibility()
-      const blog = await blogService.create({ title, author, url })
-      setSuccessMessage(`created blog entry ${title} by author ${author}`)
+      console.log('hello')
+      const blog = await blogService.create( blogObject )
+      setSuccessMessage(`created blog entry ${blogObject.title} by author ${blogObject.author}`)
       setTimeout(() => {
         setSuccessMessage('')
       }, 3000)
-      setTitle('')
-      setAuthor('')
-      setUrl('')
       setBlogs(blogs.concat(blog))
     } catch (e) {
-      setErrorMessage(`couldn't create blog entry ${title} by author ${author}`)
+      setErrorMessage(`couldn't create blog entry ${blogObject.title} by author ${blogObject.author}`)
       setTimeout(() => {
         setErrorMessage('')
       }, 3000)

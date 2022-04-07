@@ -1,17 +1,24 @@
 /* eslint-disable react/prop-types */
-import React from 'react'
+import {React, useState} from 'react'
 
-const BlogForm = ({
-  title,
-  author,
-  url,
-  setTitle,
-  setAuthor,
-  setUrl,
-  handleCreate
-}) => {
+const BlogForm = ({ createBlog }) => {
+
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  const addBlog = async (event) => {
+    event.preventDefault()
+    await createBlog(
+      {
+        title: title,
+        author: author,
+        url: url,
+      }
+    )
+  } 
   return (
-    <form onSubmit={handleCreate}>
+    <form onSubmit={addBlog}>
       <div>
         <label htmlFor='title'>title: </label>
         <input type='text' name='title' value={title} onChange={({target}) => setTitle(target.value)} />
