@@ -1,11 +1,10 @@
 /* eslint-disable react/prop-types */
-import {React, useState} from 'react'
+import { React, useState } from 'react'
+import blogService from '../services/blogs'
+
 const Blog = ({ blog }) => {
   const [details, setDetails] = useState(false)
-    
-  const showDetails = () => {
-    setDetails(!details)
-  }
+  const [likes, setLikes] = useState(blog.likes)
 
   const showWhenVisible = { display: details ? '' : 'none' }
 
@@ -14,6 +13,18 @@ const Blog = ({ blog }) => {
     borderRadius: '5px',
     margin: '5px 0',
     padding: '2px 10px'
+  }
+
+  const showDetails = () => {
+    setDetails(!details)
+  }
+
+  const addLike = async () => {
+    // eslint-disable-next-line no-unused-vars
+    const { user, ...rest } = blog
+    const newBlog = { ...rest, likes: likes + 1 }
+    await blogService.update(newBlog.id, newBlog)
+    setLikes(newBlog.likes)
   }
 
   return (
@@ -27,7 +38,7 @@ const Blog = ({ blog }) => {
           {blog.url}
         </div>
         <div>
-          likes {blog.likes} <button>like</button>
+          likes {likes} <button onClick={addLike}>like</button>
         </div>
         <div>
           {blog.user.name}
