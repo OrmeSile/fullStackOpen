@@ -4,11 +4,6 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import BlogForm from '../components/BlogForm'
 
-const user = {
-  name: 'root',
-  username: 'root'
-}
-
 const blog = {
   title: 'hello',
   author: 'me',
@@ -18,7 +13,7 @@ const blog = {
 test('blogForm calls event handler with right details',async () => {
 
   const mockHandler = jest.fn()
-  const { container } = render(<BlogForm createBlog={mockHandler}></BlogForm>)
+  render(<BlogForm createBlog={mockHandler}></BlogForm>)
 
   const button = screen.getByText('create')
   const name = screen.getByPlaceholderText('name')
