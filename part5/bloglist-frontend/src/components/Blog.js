@@ -1,8 +1,7 @@
-import { React, useState } from 'react'
-import blogService from '../services/blogs'
+import { React, useState, useImperativeHandle, forwardRef } from 'react'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, removeBlog, user }) => {
+const Blog = forwardRef(({ blog, removeBlog, user, handleLikes }, ref) => {
   const [details, setDetails] = useState(false)
   const [likes, setLikes] = useState(blog.likes)
 
@@ -15,27 +14,29 @@ const Blog = ({ blog, removeBlog, user }) => {
     padding: '2px 10px'
   }
 
+  const addLike = () => {
+    setLikes(likes + 1)
+    handleLikes(blog)
+  }
+
   const removeButton = () => <button onClick={() => removeBlog(blog)}>remove</button>
 
   const showDetails = () => {
     setDetails(!details)
   }
-
-  const addLike = async () => {
-    // eslint-disable-next-line no-unused-vars
-    const { user, ...rest } = blog
-    const newBlog = { ...rest, likes: likes + 1 }
-    await blogService.update(newBlog)
-    setLikes(newBlog.likes)
-  }
+  useImperativeHandle (ref, () => {
+    return (
+      addLike
+    )
+  })
 
   return (
     <div style={style}>
-      {blog.title} {blog.author} <button
+      <span className='div-blog'>{blog.title} {blog.author}</span> <button
         onClick={showDetails}>
         {details ? 'hide' : 'view'}
       </button>
-      <div style={showWhenVisible}>
+      <div style={showWhenVisible} className='hidden'>
         <div>
           {blog.url}
         </div>
@@ -49,12 +50,15 @@ const Blog = ({ blog, removeBlog, user }) => {
       </div>
     </div>
   )
-}
+})
 
 Blog.propTypes = {
   blog: PropTypes.object,
   removeBlog: PropTypes.func,
   user: PropTypes.object,
+  handleLikes: PropTypes.func
 }
+
+Blog.displayName = 'Blog'
 
 export default Blog

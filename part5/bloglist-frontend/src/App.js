@@ -40,13 +40,13 @@ const App = () => {
   const [successMessage, setSuccessMessage] = useState(null)
 
   const blogFormRef = useRef()
+  const blogRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
       blogs.sort((a, b) => a.likes - b.likes).reverse()
       setBlogs(blogs)
-    }
-    )
+    })
   }, [])
 
   useEffect(() => {
@@ -79,8 +79,21 @@ const App = () => {
   }
   const Blogs = () => {
     return (blogs.map(blog =>
-      <Blog removeBlog={removeBlog} key={blog.id} blog={blog} user={user}/>
+      <Blog
+        removeBlog={removeBlog}
+        key={blog.id}
+        blog={blog}
+        user={user}
+        ref={blogRef}
+        handleLikes={() => handleLikes(blog)}
+      />
     ))
+  }
+  const handleLikes = async (blog) => {
+    // eslint-disable-next-line no-unused-vars
+    const { user, ...rest } = blog
+    const newBlog = { ...rest, likes: blog.likes + 1 }
+    await blogService.update(newBlog)
   }
 
   const handleLogin = async (event) => {
