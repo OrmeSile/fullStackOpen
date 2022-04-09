@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 const Blog = forwardRef(({ blog, removeBlog, user, handleLikes }, ref) => {
   const [details, setDetails] = useState(false)
   const [likes, setLikes] = useState(blog.likes)
+  const [liked, setLiked] = useState(false)
 
   const showWhenVisible = { display: details ? '' : 'none' }
 
@@ -15,8 +16,11 @@ const Blog = forwardRef(({ blog, removeBlog, user, handleLikes }, ref) => {
   }
 
   const addLike = () => {
-    setLikes(likes + 1)
-    handleLikes(blog)
+    if (blog.likes === likes) {
+      setLikes(blog.likes + 1)
+      setLiked(!liked)
+      handleLikes(blog)
+    }
   }
 
   const removeButton = () => <button onClick={() => removeBlog(blog)}>remove</button>
@@ -31,7 +35,7 @@ const Blog = forwardRef(({ blog, removeBlog, user, handleLikes }, ref) => {
   })
 
   return (
-    <div style={style}>
+    <div className='blog' style={style}>
       <span className='div-blog'>{blog.title} {blog.author}</span> <button
         onClick={showDetails}>
         {details ? 'hide' : 'view'}
@@ -41,7 +45,17 @@ const Blog = forwardRef(({ blog, removeBlog, user, handleLikes }, ref) => {
           {blog.url}
         </div>
         <div>
-          likes {likes} <button onClick={addLike}>like</button>
+          likes {likes}
+          {!liked && <button onClick={addLike}>like</button>}
+          {liked && <button style={{
+            backgroundColor: '#52be80',
+            color: 'white',
+            border: 'none',
+            margin: '0 5px'
+          }}
+          disabled='true'>
+            liked
+          </button>}
         </div>
         <div>
           {blog.user.name}

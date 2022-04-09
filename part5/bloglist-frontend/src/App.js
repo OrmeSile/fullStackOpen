@@ -22,6 +22,7 @@ const Message = ({ errorMessage, successMessage }) => {
   return (
     <div>
       <p
+        className='message'
         style={errorMessage ? errorStyle : successStyle}>
         {message}
       </p>
@@ -92,7 +93,7 @@ const App = () => {
   const handleLikes = async (blog) => {
     // eslint-disable-next-line no-unused-vars
     const { user, ...rest } = blog
-    const newBlog = { ...rest, likes: blog.likes + 1 }
+    const newBlog = { ...rest, likes: rest.likes + 1 }
     await blogService.update(newBlog)
   }
 
@@ -108,12 +109,12 @@ const App = () => {
       window.localStorage.setItem('user', JSON.stringify(user))
       setUsername('')
       setPassword('')
-      setSuccessMessage('logged in')
+      setSuccessMessage(`${user.name} logged in`)
       setTimeout(() => {
         setSuccessMessage(null)
       }, 3000)
     } catch (e) {
-      setErrorMessage('Wrong credentials')
+      setErrorMessage('wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
       }, 3000)
