@@ -99,7 +99,6 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    console.log('logging with', username, password)
     try {
       const user = await loginService.login({
         username, password,
@@ -182,7 +181,7 @@ const App = () => {
             <button type='submit' onClick={handleLogout}>logout</button>
           </form>
           <h2>blogs</h2>
-          <div>
+          <div className='blogs'>
             <Blogs/>
           </div>
           {createBlogForm()}

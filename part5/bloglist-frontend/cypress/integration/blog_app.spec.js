@@ -43,4 +43,32 @@ describe('Blog app', function () {
         .and('contain', blog.url)
     })
   })
+  describe('When a blog has been created', function () {
+    beforeEach(function () {
+      cy.login({ username: user.username, password: user.password })
+      cy.postBlog(blog)
+    })
+    it('a blog can be liked', function () {
+      cy.get('.show-blog').click()
+      cy.get('.like').click()
+      cy.get('.likes-text').should('contain', 'likes 1')
+    })
+  })
+  describe('When multiple blogs have been created', function () {
+    beforeEach(function () {
+      cy.login({ username: user.username, password: user.password })
+      cy.postBlog({ ...blog, likes: 10 })
+      cy.postBlog({ ...blog, likes: 20 })
+      cy.postBlog({ ...blog, likes: 0 })
+    })
+    it('blogs are ordered by number of likes', function () {
+      cy.get('.blog:nth-child(1)').as('firstBlog').find('.show-blog').click()
+      cy.get('.blog:nth-child(2)').as('secondBlog').find('.show-blog').click()
+      cy.get('.blog:nth-child(3)').as('thirdBlog').find('.show-blog').click()
+
+      cy.get('@firstBlog').contains('likes 20')
+      cy.get('@secondBlog').contains('likes 10')
+      cy.get('@thirdBlog').contains('likes 0')
+    })
+  })
 })

@@ -37,6 +37,7 @@ const Blog = forwardRef(({ blog, removeBlog, user, handleLikes }, ref) => {
   return (
     <div className='blog' style={style}>
       <span className='div-blog'>{blog.title} {blog.author}</span> <button
+        className='show-blog'
         onClick={showDetails}>
         {details ? 'hide' : 'view'}
       </button>
@@ -45,8 +46,8 @@ const Blog = forwardRef(({ blog, removeBlog, user, handleLikes }, ref) => {
           {blog.url}
         </div>
         <div>
-          likes {likes}
-          {!liked && <button onClick={addLike}>like</button>}
+          <span className='likes-text'>likes {likes}</span>
+          {!liked && <button className='like' onClick={addLike}>like</button>}
           {liked && <button style={{
             backgroundColor: '#52be80',
             color: 'white',
