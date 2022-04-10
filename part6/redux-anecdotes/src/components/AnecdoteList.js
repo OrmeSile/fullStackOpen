@@ -3,12 +3,11 @@ import { incrementVote } from "../reducers/anecdoteReducer"
 
 const AnecdoteList = () => {
 
-  const anecdotes = useSelector(state => state)
+  const anecdotes = useSelector(state => state.anecdotes)
 
-  const sortedAnecdotes = anecdotes
-    .sort((a, b) => a.id - b.id)
-    .sort((a, b) => a.votes - b.votes)
-    .reverse()
+  const sortedAnecdotes = [...anecdotes]
+    .sort((a, b) => a.content.toLowerCase() < b.content.toLowerCase())
+    .sort((a, b) => a.votes < b.votes)
   
   const dispatch = useDispatch()
 
