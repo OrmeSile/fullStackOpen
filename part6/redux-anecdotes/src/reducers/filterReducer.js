@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = ''
 
@@ -7,8 +7,7 @@ const filterSlice = createSlice({
   initialState,
   reducers: {
     setFilter(state, action) {
-      const newState = action.payload
-      return newState
+      return action.payload
     }
   }
 })

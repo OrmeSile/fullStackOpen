@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = null
 const notificationSlice = createSlice({
@@ -13,7 +13,7 @@ const notificationSlice = createSlice({
       const content = action.payload
       return `anecdote "${content}" created`
     },
-    emptyNotification( _state, _action ) {
+    emptyNotification( ) {
       return initialState
     }
   }

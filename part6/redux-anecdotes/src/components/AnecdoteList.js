@@ -1,7 +1,7 @@
-import { useSelector, useDispatch } from "react-redux"
-import { incrementVote } from "../reducers/anecdoteReducer"
-import { displayVote, emptyNotification } from "../reducers/notificationReducer"
-import Filter from "./Filter"
+import { useSelector, useDispatch } from 'react-redux'
+import { incrementVote } from '../reducers/anecdoteReducer'
+import { displayVote, emptyNotification } from '../reducers/notificationReducer'
+import Filter from './Filter'
 
 const AnecdoteList = () => {
 
@@ -24,7 +24,7 @@ const AnecdoteList = () => {
     dispatch(incrementVote(id))
     setTimeout(() => {
       dispatch(emptyNotification())
-    }, 5000);
+    }, 5000)
   }
 
   return (
