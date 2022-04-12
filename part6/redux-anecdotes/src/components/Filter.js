@@ -1,5 +1,6 @@
 import { setFilter } from '../reducers/filterReducer'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
 const Filter = (props) => {
 
@@ -17,5 +18,10 @@ const Filter = (props) => {
     </div>
   )
 }
+
+Filter.propTypes = {
+  setFilter: PropTypes.func
+}
+
 const connectedFilter = connect(null, {setFilter})(Filter)
 export default connectedFilter

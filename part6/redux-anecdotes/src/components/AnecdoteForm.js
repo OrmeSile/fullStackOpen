@@ -2,6 +2,7 @@
 import { createAnecdote } from '../reducers/anecdoteReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
 const AnecdoteForm = (props) => {
 
@@ -32,5 +33,11 @@ const mapDispatchToProps = {
 }
 
 const connectedAnecdoteForm = connect(null, mapDispatchToProps)(AnecdoteForm)
+
+AnecdoteForm.propTypes = {
+  createAnecdote: PropTypes.func,
+  setNotification: PropTypes.func
+}
+
 
 export default connectedAnecdoteForm

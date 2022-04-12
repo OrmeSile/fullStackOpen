@@ -1,9 +1,7 @@
-// import { useSelector } from 'react-redux'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
 const Notification = (props) => {
-
-  // const notification = useSelector(state => state.notification)
 
   const notification = props.notification
 
@@ -27,6 +25,9 @@ const mapStateToProps = (state) => {
   return {
     notification: state.notification
   }
+}
+Notification.propTypes = {
+  notification: PropTypes.string
 }
 
 const connectedNotification = connect(mapStateToProps)(Notification)
