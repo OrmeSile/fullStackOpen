@@ -29,10 +29,6 @@ const mapStateToProps = (state) => {
   }
 }
 
-Notification.propTypes = {
-  notification: String
-}
-
 const connectedNotification = connect(mapStateToProps)(Notification)
 
 export default connectedNotification
