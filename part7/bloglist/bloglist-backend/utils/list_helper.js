@@ -19,7 +19,7 @@ const mostBlogs = (blogs) => {
   const mapped = Object.keys(grouped).map((key) => {
     return {
       author: key,
-      blogs: grouped[key].length
+      blogs: grouped[key].length,
     }
   })
   return [...mapped].sort((a, b) => a.blogs - b.blogs)[mapped.length - 1]
@@ -33,15 +33,15 @@ const mostLikes = (blogs) => {
     const likes = totalLikes(grouped[key])
     return {
       author: key,
-      likes: likes
+      likes: likes,
     }
   })
-  return [...mapped].sort((a, b) => a.likes -b.likes)[mapped.length -1]
+  return [...mapped].sort((a, b) => a.likes - b.likes)[mapped.length - 1]
 }
 
 module.exports = {
   dummy,
   totalLikes,
   mostBlogs,
-  mostLikes
+  mostLikes,
 }

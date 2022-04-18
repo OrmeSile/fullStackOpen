@@ -3,10 +3,8 @@ const Blog = require('../models/Blog')
 const User = require('../models/User')
 const jwt = require('jsonwebtoken')
 
-blogsRouter.get('/',async (_request, response) => {
-  const blogs = await Blog.find({}).populate(
-    'user', { username: 1, name: 1 }
-  )
+blogsRouter.get('/', async (_request, response) => {
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
   response.status(200).json(blogs)
 })
 
@@ -34,7 +32,10 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.get('/:id', async (request, response) => {
-  const blog = await Blog.findById(request.params.id).populate('user', { username: 1, name: 1 })
+  const blog = await Blog.findById(request.params.id).populate('user', {
+    username: 1,
+    name: 1,
+  })
   if (blog) {
     response.status(200).json(blog)
   } else {
@@ -50,7 +51,10 @@ blogsRouter.delete('/', async (_request, response) => {
 blogsRouter.delete('/:id', async (request, response) => {
   const token = request.token
   const decodedToken = jwt.decode(token, process.env.SECRET)
-  const blog = await Blog.findById(request.params.id).populate('user', { username: 1, name: 1 })
+  const blog = await Blog.findById(request.params.id).populate('user', {
+    username: 1,
+    name: 1,
+  })
 
   if (blog.user._id.toString() !== decodedToken.id) {
     return response.status(401).send()

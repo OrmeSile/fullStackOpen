@@ -21,7 +21,7 @@ describe('users', () => {
     const user = {
       username: 'hello',
       name: 'mel',
-      password: 'secrets'
+      password: 'secrets',
     }
     const response = await api.post('/api/users').send(user)
     expect(response.status).toBe(201)
@@ -31,7 +31,7 @@ describe('users', () => {
     const user = {
       username: 'root',
       name: 'hello',
-      password: 'secret'
+      password: 'secret',
     }
     const response = await api.post('/api/users').send(user)
     expect(response.status).toBe(400)
@@ -41,7 +41,7 @@ describe('users', () => {
     const initialUsers = await helper.usersInDB()
     const user = {
       username: 'hif',
-      name: 'blabla'
+      name: 'blabla',
     }
     const response = await api.post('/api/users').send(user)
     const afterState = await helper.usersInDB()
@@ -52,7 +52,7 @@ describe('users', () => {
   test('password needs to be longer than 3 characters', async () => {
     const user = {
       username: 'hello',
-      password: 'hi'
+      password: 'hi',
     }
     const response = await api.post('/api/users').send(user)
     expect(response.error.status).toBe(400)
@@ -60,7 +60,7 @@ describe('users', () => {
   test('cannot be created without a username', async () => {
     const initialState = await helper.usersInDB()
     const user = {
-      password: 'secret'
+      password: 'secret',
     }
     const response = await api.post('/api/users').send(user)
     const afterState = await helper.usersInDB()
@@ -69,8 +69,7 @@ describe('users', () => {
   })
   test('can login', async () => {
     const { username, password } = helper.initialUser
-    const response = await api.post('/api/login')
-      .send({ username, password })
+    const response = await api.post('/api/login').send({ username, password })
     expect(response.status).toBe(200)
   })
 })
@@ -84,7 +83,8 @@ describe('users and blogs --- ', () => {
     const { username, password } = helper.initialUser
     const login = await api.post('/api/login').send({ username, password })
     token = login.body.token
-    await api.post('/api/blogs')
+    await api
+      .post('/api/blogs')
       .set('authorization', `Bearer ${token}`)
       .send(helper.newBlog)
   })

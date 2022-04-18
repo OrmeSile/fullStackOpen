@@ -11,12 +11,13 @@ const mongoose = require('mongoose')
 const morgan = require('morgan')
 const middleware = require('./utils/middleware')
 
-mongoose.connect(config.MONGODB_URI)
+mongoose
+  .connect(config.MONGODB_URI)
   .then(() => {
     logger.info('connected to MongoDB')
   })
-  .catch(error => {
-    logger.error('error connecting to mongoDB:',error.message)
+  .catch((error) => {
+    logger.error('error connecting to mongoDB:', error.message)
   })
 
 app.use(cors())
@@ -25,7 +26,9 @@ app.use(express.json())
 
 if (process.env.NODE_ENV !== 'test') {
   morgan.token('body', (req) => JSON.stringify(req.body))
-  app.use(morgan(':method :url :status :res[content-length] :response-time ms :body'))
+  app.use(
+    morgan(':method :url :status :res[content-length] :response-time ms :body')
+  )
 }
 
 if (process.env.NODE_ENV === 'test') {

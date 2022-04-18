@@ -15,11 +15,10 @@ const initialBlogs = [
     url: 'distant',
     likes: 5,
     user: '',
-  }
+  },
 ]
 
-const newBlog =
-{
+const newBlog = {
   title: 'majora',
   author: 'ganon',
   url: 'gerudo',
@@ -33,14 +32,12 @@ const initialUser = {
 }
 
 const nonExistingId = async () => {
-  const blog = new Blog(
-    {
-      title: 'link',
-      author: 'zelda',
-      url: 'hyrule',
-      likes: 50,
-    }
-  )
+  const blog = new Blog({
+    title: 'link',
+    author: 'zelda',
+    url: 'hyrule',
+    likes: 50,
+  })
   await blog.save()
   await blog.remove()
 
@@ -49,16 +46,16 @@ const nonExistingId = async () => {
 
 const blogsInDB = async () => {
   const blogs = await Blog.find({})
-  return blogs.map(blog => blog.toJSON())
+  return blogs.map((blog) => blog.toJSON())
 }
 const usersInDB = async () => {
   const users = await User.find({})
-  return users.map(blog => blog.toJSON())
+  return users.map((blog) => blog.toJSON())
 }
 
 const blogById = async (id) => {
   const blog = await Blog.findById(id)
-  return blog.map(blog => blog.toJSON())
+  return blog.map((blog) => blog.toJSON())
 }
 
 module.exports = {
