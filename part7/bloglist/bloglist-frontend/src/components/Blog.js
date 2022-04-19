@@ -54,7 +54,7 @@ const Blog = forwardRef(({ blog, removeBlog, user, handleLikes }, ref) => {
             border: 'none',
             margin: '0 5px'
           }}
-          disabled='true'>
+          disabled={true}>
             liked
           </button>}
         </div>

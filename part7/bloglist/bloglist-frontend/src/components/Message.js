@@ -2,7 +2,6 @@ import { useSelector } from 'react-redux'
 
 const Message = () => {
   const { message, status } = useSelector((store) => store.notification)
-  console.log(message, status)
   const errorStyle = {
     color: 'red',
     background: 'lightgrey',
@@ -13,12 +12,22 @@ const Message = () => {
     marginBottom: 10,
   }
   const successStyle = { ...errorStyle, color: 'green' }
+  const hiddenStyle = { display: 'none' }
+  let style
+
+  if (status === 'error') {
+    style = errorStyle
+  }else if (status === 'ok') {
+    style = successStyle
+  }else if (status === 'hidden') {
+    style = hiddenStyle
+  }
 
   return (
     <div>
       <p
         className="message"
-        style={status === 'error' ? errorStyle : successStyle}
+        style={style}
       >
         {message}
       </p>
