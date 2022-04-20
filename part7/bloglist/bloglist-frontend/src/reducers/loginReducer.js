@@ -5,7 +5,7 @@ import { setNotification } from './notificationReducer'
 
 const initialState = null
 const userSlice = createSlice({
-  name: 'user',
+  name: 'loggedUser',
   initialState,
   reducers: {
     setUser(_state, action) {
@@ -25,12 +25,23 @@ export const login = (credentials) => {
     dispatch(setUser(user))
     blogService.setToken(user.token)
     window.localStorage.setItem('user', JSON.stringify(user))
-    console.log('user after', user)
     if (user) {
       dispatch(
         setNotification({ message: `${user.name} logged in`, status: 'ok' }, 5)
       )
     }
+  }
+}
+
+export const localLogin = (user) => {
+  return dispatch => {
+    const token = user.token
+    console.log(token)
+    blogService.setToken(token)
+    dispatch(setUser(user))
+    dispatch(
+      setNotification({ message: `${user.name} logged in`, status: 'ok' }, 5)
+    )
   }
 }
 
