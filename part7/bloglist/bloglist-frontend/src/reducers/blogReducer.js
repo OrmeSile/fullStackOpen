@@ -13,7 +13,7 @@ const blogSlice = createSlice({
     appendBlog(state, action) {
       state.push(action.payload)
     },
-    likeBlog(state, action) {
+    updateBlog(state, action) {
       const blogId = action.payload.id
       const newBlog = action.payload
       return state.map((blog) => (blog.id === blogId ? newBlog : blog))
@@ -25,7 +25,8 @@ const blogSlice = createSlice({
   },
 })
 
-export const { setBlogs, appendBlog, likeBlog, removeBlog } = blogSlice.actions
+export const { setBlogs, appendBlog, updateBlog, removeBlog } =
+  blogSlice.actions
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
@@ -48,13 +49,28 @@ export const deleteBlog = (content) => {
   }
 }
 
+export const addComment = (content) => {
+  console.log(content)
+  return async (dispatch) => {
+    const blog = content.blog
+    const comments = [...blog.comments.concat(content.comment)]
+    const newBlog = { ...blog, comments: comments }
+    // eslint-disable-next-line no-unused-vars
+    const { user, ...rest } = newBlog
+    console.log(rest)
+    const response = await blogService.updateComments(rest)
+    console.log(response)
+    dispatch(updateBlog(newBlog))
+  }
+}
+
 export const addLike = (content) => {
   return async (dispatch) => {
     const { user, ...rest } = content
     const newBlog = { ...rest, likes: content.likes + 1 }
     await blogService.update(newBlog)
     const storeBlog = { ...newBlog, user: user }
-    dispatch(likeBlog(storeBlog))
+    dispatch(updateBlog(storeBlog))
   }
 }
 

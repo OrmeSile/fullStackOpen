@@ -3,7 +3,7 @@ const User = require('../models/User')
 
 const errorHandler = (err, _req, res, next) => {
   if (err.name === 'CastError') {
-    return res.status(400).send({ error: 'malformatted id' })
+    return res.status(400).send({ error: 'malformatted id', content: err })
   } else if (err.name === 'ValidationError') {
     return res.status(400).send(err.message)
   } else if (err.name === 'JsonWebTokenError') {

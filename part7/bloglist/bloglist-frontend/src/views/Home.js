@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import Blog from '../components/Blog'
 import BlogForm from '../components/BlogForm'
 import LoginForm from '../components/LoginForm'
@@ -7,12 +7,7 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import { setNotification } from '../reducers/notificationReducer'
-import {
-  addLike,
-  createBlog,
-  deleteBlog,
-  initializeBlogs,
-} from '../reducers/blogReducer'
+import { createBlog } from '../reducers/blogReducer'
 import { login, logout } from '../reducers/loginReducer'
 
 const Home = () => {
@@ -32,10 +27,6 @@ const Home = () => {
   const [password, setPassword] = useState('')
 
   const blogFormRef = useRef()
-
-  useEffect(() => {
-    dispatch(initializeBlogs())
-  }, [])
 
   const loginForm = () => {
     return (
@@ -57,21 +48,7 @@ const Home = () => {
     )
   }
   const Blogs = () => {
-    return blogs.map((blog) => (
-      <Blog
-        removeBlog={removeBlog}
-        key={blog.id}
-        blog={blog}
-        user={loggedUser}
-        handleLikes={() => handleLikes(blog)}
-      />
-    ))
-  }
-  const handleLikes = async (blog) => {
-    dispatch(addLike(blog))
-    dispatch(
-      setNotification({ message: `liked ${blog.title}`, status: 'ok' }, 5)
-    )
+    return blogs.map((blog) => <Blog key={blog.id} blog={blog} />)
   }
 
   const handleLogin = async (event) => {
@@ -138,24 +115,9 @@ const Home = () => {
       console.log(e)
     }
   }
-  const removeBlog = async (blogObject) => {
-    try {
-      const choiceWindow = window.confirm(
-        `remove blog ${blogObject.title} by ${blogObject.author} ?`
-      )
-      if (choiceWindow) {
-        dispatch(deleteBlog(blogObject))
-      }
-    } catch (e) {
-      console.log(e)
-    }
-  }
 
   return (
     <div>
-      <div>
-        <Message />
-      </div>
       {!loggedUser && loginForm()}
       {loggedUser && (
         <div>

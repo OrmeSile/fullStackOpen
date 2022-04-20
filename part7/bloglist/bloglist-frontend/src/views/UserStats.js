@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const UserStats = () => {
   const users = useSelector((store) => store.users)
-  console.log('users after selection from store', users)
 
   const Users = ({ users }) => {
     if (!users) {
@@ -18,10 +18,9 @@ const UserStats = () => {
   }
 
   const User = ({ user }) => {
-    console.log('user inside User component', user)
     return (
       <tr>
-        <td>{user.name}</td>
+        <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
         <td>{user.blogs.length}</td>
       </tr>
     )

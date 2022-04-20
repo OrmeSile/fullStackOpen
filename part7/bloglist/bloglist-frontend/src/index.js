@@ -7,19 +7,22 @@ import notificationReducer from './reducers/notificationReducer'
 import blogReducer from './reducers/blogReducer'
 import loginReducer from './reducers/loginReducer'
 import usersReducer from './reducers/usersReducer'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 const store = configureStore({
   reducer: {
     notification: notificationReducer,
     blogs: blogReducer,
     loggedUser: loginReducer,
-    users: usersReducer
+    users: usersReducer,
   },
 })
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Router>
+      <App />
+    </Router>
   </Provider>,
   document.getElementById('root')
 )
