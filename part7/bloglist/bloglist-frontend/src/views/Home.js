@@ -9,6 +9,7 @@ import Message from '../components/Message'
 import { setNotification } from '../reducers/notificationReducer'
 import { createBlog } from '../reducers/blogReducer'
 import { login, logout } from '../reducers/loginReducer'
+import { ListGroup } from 'react-bootstrap'
 
 const Home = () => {
   const dispatch = useDispatch()
@@ -127,9 +128,9 @@ const Home = () => {
             </button>
           </form>
           <h2>blogs</h2>
-          <div className="blogs">
+          <ListGroup className="blogs">
             <Blogs />
-          </div>
+          </ListGroup>
           {createBlogForm()}
         </div>
       )}

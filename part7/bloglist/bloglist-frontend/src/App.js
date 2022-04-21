@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Home from './views/Home'
-import { Routes, Route, Link, useMatch } from 'react-router-dom'
+import { Routes, Route, useMatch } from 'react-router-dom'
 import UserStats from './views/UserStats'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeUsers } from './reducers/usersReducer'
@@ -9,6 +9,7 @@ import { localLogin } from './reducers/loginReducer'
 import User from './views/User'
 import BlogView from './views/BlogView'
 import Message from './components/Message'
+import { Nav } from 'react-bootstrap'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -35,12 +36,16 @@ const App = () => {
   console.log('user', usr)
 
   return (
-    <div>
-      <div>
-        <Link to="/">home</Link>
-        <Link to="/users">users</Link>
-      </div>
-      <Message/>
+    <div className="container">
+      <Nav defaultActiveKey="/home" variant="pills">
+        <Nav.Item>
+          <Nav.Link href="/">home</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link href="/users">users</Nav.Link>
+        </Nav.Item>
+      </Nav>
+      <Message />
       <Routes>
         <Route path="/blogs/:id" element={<BlogView />} />
         <Route path="/users/:id" element={<User />} />

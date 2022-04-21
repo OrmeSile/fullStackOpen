@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { setNotification } from '../reducers/notificationReducer'
 import { addComment, addLike } from '../reducers/blogReducer'
+import { ListGroup, Button, Form } from 'react-bootstrap'
 
 const BlogView = () => {
   const id = useParams().id
@@ -26,6 +27,7 @@ const BlogView = () => {
 
   const handleComments = (event) => {
     event.preventDefault()
+    console.log(event)
     const comment = event.target[0].value
     dispatch(
       addComment({
@@ -47,17 +49,26 @@ const BlogView = () => {
       </span>
       <p>added by {blog.user.name}</p>
       <h4>Comments</h4>
-      <ul>
+      <ListGroup>
         {blog.comments.length !== 0 ? (
-          blog.comments.map((comment, index) => <li key={index}>{comment}</li>)
+          blog.comments.map((comment, index) => (
+            <ListGroup.Item key={index}>{comment}</ListGroup.Item>
+          ))
         ) : (
-          <li>No comments yet !</li>
+          <ListGroup.Item>No comments yet !</ListGroup.Item>
         )}
-      </ul>
-      <form onSubmit={handleComments}>
-        <input type="text" />
-        <button>submit</button>
-      </form>
+      </ListGroup>
+      <div>
+        <Form onSubmit={handleComments}>
+          <Form.Group>
+            <Form.Label>Comment:</Form.Label>
+            <Form.Control type="text" name="comment" />
+            <Button variant="primary" type="submit">
+              submit
+            </Button>
+          </Form.Group>
+        </Form>
+      </div>
     </div>
   )
 }
