@@ -2,9 +2,9 @@ import { useMutation, useQuery } from '@apollo/client'
 import { useState } from 'react'
 import { ALL_AUTHORS, MODIFY_AGE } from '../query'
 import Select from 'react-select'
+import { Token } from 'graphql'
 
-const Authors = (props) => {
-  const [name, setName] = useState('')
+const Authors = ({ show, token }) => {
   const [born, setBorn] = useState('')
   const [option, setOption] = useState(null)
 
@@ -17,7 +17,7 @@ const Authors = (props) => {
     return <div>Loading...</div>
   }
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
 
@@ -36,7 +36,7 @@ const Authors = (props) => {
         born: Number(born),
       },
     })
-    setName('')
+    setOption('')
     setBorn('')
   }
 
@@ -63,29 +63,33 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <h3>Set birthyear</h3>
-      <form onSubmit={handleModifyAuthorAge}>
+      {token && (
         <div>
-          <label>
-            {'name '}
-            <Select
-              value={option}
-              onChange={handleOptionChange}
-              options={options}
-            />
-          </label>
+          <h3>Set birthyear</h3>
+          <form onSubmit={handleModifyAuthorAge}>
+            <div>
+              <label>
+                {'name '}
+                <Select
+                  value={option}
+                  onChange={handleOptionChange}
+                  options={options}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                {'born '}
+                <input
+                  value={born}
+                  onChange={({ target }) => setBorn(target.value)}
+                />
+              </label>
+            </div>
+            <button>set date</button>
+          </form>
         </div>
-        <div>
-          <label>
-            {'born '}
-            <input
-              value={born}
-              onChange={({ target }) => setBorn(target.value)}
-            />
-          </label>
-        </div>
-        <button>set date</button>
-      </form>
+      )}
     </div>
   )
 }

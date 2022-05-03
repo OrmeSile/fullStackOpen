@@ -18,6 +18,7 @@ export const ALL_BOOKS = gql`
         id
       }
       published
+      genres
     }
   }
 `
@@ -44,7 +45,6 @@ export const ADD_BOOK = gql`
     }
   }
 `
-
 export const MODIFY_AGE = gql`
   mutation changeAge($name: String!, $born: Int!) {
     editAuthor(name: $name, setBornTo: $born) {
@@ -53,13 +53,19 @@ export const MODIFY_AGE = gql`
     }
   }
 `
-
 export const LOGIN = gql`
-mutation login(
-  $username: String!
-  $password: String!
-){
-  login(username: $username, password: $password) {
-    value
+  mutation login($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
+      value
+    }
   }
-}`
+`
+export const ME = gql`
+  query {
+    me {
+      username
+      favoriteGenre
+      id
+    }
+  }
+`
