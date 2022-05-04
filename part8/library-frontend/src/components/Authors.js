@@ -2,7 +2,6 @@ import { useMutation, useQuery } from '@apollo/client'
 import { useState } from 'react'
 import { ALL_AUTHORS, MODIFY_AGE } from '../query'
 import Select from 'react-select'
-import { Token } from 'graphql'
 
 const Authors = ({ show, token }) => {
   const [born, setBorn] = useState('')

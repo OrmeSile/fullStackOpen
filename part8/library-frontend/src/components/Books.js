@@ -1,38 +1,43 @@
-import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from '../query'
-import { useState } from 'react'
+import { useLazyQuery } from '@apollo/client'
+import { BOOKS_BY_GENRE } from '../query'
+import { useState, useEffect } from 'react'
 
 const Books = (props) => {
-  const result = useQuery(ALL_BOOKS)
-  const [genre, setGenre] = useState('all')
+  const [genre, setGenre] = useState(null)
+  const [booksByGenre, { loading, error, data }] = useLazyQuery(BOOKS_BY_GENRE)
+  
+  useEffect(() => {
+    booksByGenre()
+  }, [genre])
 
-  if (result.loading) {
+  if (loading) {
     return <div>Loading...</div>
   }
   if (!props.show) {
     return null
   }
-
-  const books = result.data.allBooks
-
-  const filterBooks = () => {
-    if (genre === 'all') {
-      return books
-    } else {
-      return books.filter(book => book.genres.includes(genre))
-    }
+  if (error) {
+    console.log(error)
   }
+
+  const books = data.allBooks
+
   const bookGenres = books
     .map((book) => book.genres)
     .flat()
     .reduce((total, current) => {
       return !total.includes(current) ? total.concat(current) : total
     }, [])
+  
+  const handleCLick = (genre) => {
+    setGenre(genre)
+    booksByGenre({ variables: { genre } })
+  }
 
   return (
     <div>
       <h2>books</h2>
-      {genre !== 'all' && <h3>Showing books with genre {genre}</h3>}
+      {genre ? <h4>Showing books with genre {genre}</h4> : <h4>Showing all books</h4>}
       <table>
         <tbody>
           <tr>
@@ -40,7 +45,7 @@ const Books = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {filterBooks().map((a) => (
+          {books.map((a) => (
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
@@ -50,9 +55,9 @@ const Books = (props) => {
         </tbody>
       </table>
       {bookGenres.map((genre) => (
-        <button onClick={() => setGenre(genre)}>{genre}</button>
+        <button key={genre} onClick={() => handleCLick(genre)}>{genre}</button>
       ))}
-      <button onClick={() => setGenre('all')}>All books</button>
+      <button onClick={() => setGenre(null)}>All books</button>
     </div>
   )
 }

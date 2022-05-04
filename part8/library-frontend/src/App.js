@@ -37,7 +37,7 @@ const App = () => {
 
       <LoginForm show={page === 'login'} setToken={setToken} setPage={setPage} />
       
-      <Recommend show = {page === 'recommend'} />
+      <Recommend show = {page === 'recommend'} token = {token} />
     </div>
   )
 }

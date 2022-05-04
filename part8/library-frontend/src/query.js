@@ -45,6 +45,20 @@ export const ADD_BOOK = gql`
     }
   }
 `
+
+export const BOOKS_BY_GENRE = gql`
+  query booksByGenre($genre: String) {
+    allBooks (genre: $genre) {
+      title
+      author {
+        name
+        id
+      }
+      published
+      genres
+    }
+  }
+`
 export const MODIFY_AGE = gql`
   mutation changeAge($name: String!, $born: Int!) {
     editAuthor(name: $name, setBornTo: $born) {
