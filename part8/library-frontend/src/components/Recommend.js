@@ -4,7 +4,6 @@ import { ME, BOOKS_BY_GENRE } from '../query'
 
 const Recommend = ({ show, token }) => {
   const meResult = useQuery(ME, {skip: !token})
-  console.log(meResult)
   const favoriteGenre = meResult.data ? meResult.data.me.favoriteGenre : ''
   const booksResult = useQuery(BOOKS_BY_GENRE, {
     variables: { genre: favoriteGenre },

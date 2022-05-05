@@ -7,7 +7,7 @@ const Books = (props) => {
   const [booksByGenre, { loading, error, data }] = useLazyQuery(BOOKS_BY_GENRE)
   
   useEffect(() => {
-    booksByGenre()
+    booksByGenre({variables: {genre}})
   }, [genre])
 
   if (loading) {
@@ -20,9 +20,7 @@ const Books = (props) => {
     console.log(error)
   }
 
-  const books = data.allBooks
-
-  const bookGenres = books
+  const bookGenres = data.allBooks
     .map((book) => book.genres)
     .flat()
     .reduce((total, current) => {
@@ -45,7 +43,7 @@ const Books = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {books.map((a) => (
+          {data.allBooks.map((a) => (
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>

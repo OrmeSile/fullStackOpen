@@ -3,7 +3,9 @@ const Book = require('../models/Book')
 const Author = require('../models/Author')
 const User = require('../models/User')
 const jwt = require('jsonwebtoken')
-const {JWT_SECRET} = require('../utils/config')
+const { JWT_SECRET } = require('../utils/config')
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
 
 const resolvers = {
   Query: {
@@ -73,7 +75,11 @@ const resolvers = {
           invalidArgs: args,
         })
       }
-      return await newBook.populate('author')
+      const book = await newBook.populate('author')
+
+      pubsub.publish('BOOK_ADDED', {bookAdded: book})
+
+      return book
     },
     editAuthor: async (_root, args, context) => {
       if (!context.currentUser) {
@@ -98,6 +104,11 @@ const resolvers = {
       return {value: jwt.sign(userForToken, JWT_SECRET)}
     }
   },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
+    }
+  }
 }
 
 module.exports = resolvers
