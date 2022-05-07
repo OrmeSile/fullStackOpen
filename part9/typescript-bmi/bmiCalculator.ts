@@ -57,4 +57,4 @@ const calculateBmi = (height: number, mass: number) => {
 //   console.log(errorMessage);
 // }
 
-export default calculateBmi
+export default calculateBmi;
