@@ -1,4 +1,4 @@
-import patients from '../../data/patients.json';
+import patients from '../../data/patients';
 import { SafePatient, Patient, NewPatient } from '../types';
 import { v1 as uuid } from 'uuid';
 import { toNewPatient } from '../utils';
@@ -26,8 +26,12 @@ const newPatient = (patient: NewPatient): Patient => {
   };
 };
 
+const getPatient = (id: string): Patient | undefined => {
+  return patients.find((patient) => patient.id === id);
+};
 export default {
   getSafePatients,
   newPatient,
-  addPatient
+  addPatient,
+  getPatient,
 };

@@ -1,4 +1,4 @@
-import { NewPatient, Gender } from './types';
+import { NewPatient, Gender, Entry } from './types';
 
 type Fields = {
   name: unknown;
@@ -6,15 +6,24 @@ type Fields = {
   ssn: unknown;
   gender: unknown;
   occupation: unknown;
+  entries: Entry[];
 };
 
-export const toNewPatient = ({name, dateOfBirth, ssn, gender, occupation}: Fields): NewPatient => {
+export const toNewPatient = ({
+  name,
+  dateOfBirth,
+  ssn,
+  gender,
+  occupation,
+  entries,
+}: Fields): NewPatient => {
   const newPatient: NewPatient = {
     name: parseName(name),
     dateOfBirth: parseDateOfBirth(dateOfBirth),
     ssn: parseSsn(ssn),
     gender: parseGender(gender),
     occupation: parseOccupation(occupation),
+    entries: entries,
   };
   return newPatient;
 };
