@@ -36,7 +36,6 @@ export const toNewPatient = ({
   return newPatient;
 };
 
-
 export const toNewEntry = (entry: EntryWithoutId): EntryWithoutId => {
   const tempEntry = {
     description: parseDescription(entry.description),

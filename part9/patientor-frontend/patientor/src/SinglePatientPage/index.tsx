@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useStateValue, updatePatient, setDiagnoseList } from '../state';
-import { Patient, Entry, Diagnose, entryTypes } from '../types';
+import { Patient, Entry, Diagnose ,EntryWithoutId } from '../types';
 import { apiBaseUrl } from '../constants';
 import { useParams } from 'react-router-dom';
 import WorkIcon from '@material-ui/icons/Work';
@@ -9,11 +9,18 @@ import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import HealingIcon from '@material-ui/icons/Healing';
 import { assertNever } from '../utils';
 
+
 const SinglePatientPage = () => {
   const [{ patients, diagnoses }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
   const [statePatient, setPatient] = useState<Patient | null>(null);
-  console.log(diagnoses);
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+  };
 
   const entryBoxStyle = {
     border: 'solid black 1px',
