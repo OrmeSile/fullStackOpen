@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import express from 'express';
 import patientService from '../services/patients';
+import { EntryWithoutId } from '../types';
 
 const router = express.Router();
 
@@ -25,6 +26,13 @@ router.get('/:id', (req, res) => {
   const userId = req.params.id;
   const patient = patientService.getPatient(userId);
   res.json(patient);
+});
+
+router.post('/:id/entries', (req, res) => {
+  const userId = req.params.id;
+  const entry: EntryWithoutId = req.body;
+  const newEntry = patientService.addEntryToPatient(userId, entry);
+  res.json(newEntry);
 });
 
 export default router;
