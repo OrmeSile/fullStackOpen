@@ -22,6 +22,25 @@ const SinglePatientPage = () => {
     setModalOpen(false);
   };
 
+  const submitNewEntry = async (values: EntryWithoutId) => {
+    try {
+      const { data: Entry } = await axios.post<Entry>(
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        `${apiBaseUrl}/patients/${id}/entries`,
+        values
+      );
+      
+      dispatch(addPatient(newPatient));
+      closeModal();
+    } catch (e: unknown) {
+      console.log(e);
+      } else {
+        console.error('Unknown error', e);
+        setError('Unknown error');
+      }
+    }
+  };
+
   const entryBoxStyle = {
     border: 'solid black 1px',
     margin: '4px 0',
